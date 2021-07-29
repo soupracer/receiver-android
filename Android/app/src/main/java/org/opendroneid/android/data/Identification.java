@@ -84,14 +84,24 @@ public class Identification extends MessageData {
         }
     }
 
+    private String bytesToIPv6FormatString(byte[] bytes) {
+        StringBuilder sb = new StringBuilder();
+        // IPv6 is 16 bytes long.
+        for(int i = 0; i < Constants.IPv6_BYTE_LENGTH; i++) {
+            if (i % 2 == 0) {
+                if ((bytes[i] & 0xFF) > 0)
+                    sb.append(String.format("%X", bytes[i]));
+            } else
+                sb.append(String.format("%02X:", bytes[i]));
+        }
+        if(sb.charAt(sb.length()-1) == ':')
+            sb.deleteCharAt(sb.length()-1);
+        return sb.toString();
+    }
+
     public byte[] getUasId() { return uasId; }
     public String getUasIdAsString() {
-        return idType == IdTypeEnum.HHIT_ID ?
-                Hex.bytesToStringLowercase(
-                        Arrays.copyOfRange(uasId, 0, Constants.HHIT_BYTE_LENGTH))
-                :
-                new String(uasId);
-
+        return idType == IdTypeEnum.HHIT_ID ? bytesToIPv6FormatString(uasId) : new String(uasId);
     }
     public void setUasId(byte[] uasId) {
         if (uasId.length <= Constants.MAX_ID_BYTE_SIZE)
