@@ -14,6 +14,7 @@ public class Constants {
     public static final String DELIM = ",";
 
     public static final int MAX_ID_BYTE_SIZE = 20;
+    public static final int HHIT_BYTE_LENGTH = 16;
     public static final int MAX_STRING_BYTE_SIZE = 23;
     public static final int MAX_AUTH_DATA_PAGES = 5;
     public static final int MAX_AUTH_PAGE_ZERO_SIZE = 17;

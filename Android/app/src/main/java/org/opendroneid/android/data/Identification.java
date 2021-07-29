@@ -6,6 +6,8 @@
  */
 package org.opendroneid.android.data;
 
+import com.google.android.gms.common.util.Hex;
+
 import org.opendroneid.android.Constants;
 import java.util.Arrays;
 
@@ -46,6 +48,7 @@ public class Identification extends MessageData {
         Serial_Number,
         CAA_Registration_ID,
         UTM_Assigned_ID,
+        HHIT_ID
     }
 
     public UaTypeEnum getUaType() { return uaType; }
@@ -76,12 +79,20 @@ public class Identification extends MessageData {
             case 1: this.idType = IdTypeEnum.Serial_Number; break;
             case 2: this.idType = IdTypeEnum.CAA_Registration_ID; break;
             case 3: this.idType = IdTypeEnum.UTM_Assigned_ID; break;
+            case 4: this.idType = IdTypeEnum.HHIT_ID; break;
             default: this.idType = IdTypeEnum.None; break;
         }
     }
 
     public byte[] getUasId() { return uasId; }
-    public String getUasIdAsString() { return new String(uasId); }
+    public String getUasIdAsString() {
+        return idType == IdTypeEnum.HHIT_ID ?
+                Hex.bytesToStringLowercase(
+                        Arrays.copyOfRange(uasId, 0, Constants.HHIT_BYTE_LENGTH))
+                :
+                new String(uasId);
+
+    }
     public void setUasId(byte[] uasId) {
         if (uasId.length <= Constants.MAX_ID_BYTE_SIZE)
             this.uasId = uasId;
